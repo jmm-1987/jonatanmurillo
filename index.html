@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jonatan Murillo | Apoyo operativo para empresas</title>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+  <style>
+    :root{
+      --blue:#005BFF;
+      --blue-dark:#003DB5;
+      --text:#0f172a;
+      --muted:#64748b;
+      --bg:#f8fafc;
+      --card:#ffffff;
+      --border:#e2e8f0;
+      --green:#16a34a;
+      --shadow:0 18px 50px rgba(15,23,42,.08);
+    }
+
+    *{box-sizing:border-box}
+
+    html{scroll-behavior:smooth}
+
+    body{
+      margin:0;
+      font-family:Inter,Arial,sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(0,91,255,.10), transparent 28%),
+        radial-gradient(circle at bottom left, rgba(0,91,255,.08), transparent 26%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.55;
+    }
+
+    a{color:inherit}
+
+    .container{
+      width:min(1120px,92%);
+      margin:auto;
+    }
+
+    header{
+      padding:26px 0;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-weight:800;
+      font-size:22px;
+    }
+
+    .logo{
+      width:46px;
+      height:46px;
+      border-radius:0;
+      display:block;
+      object-fit:contain;
+      background:transparent;
+      box-shadow:none;
+    }
+
+    nav{
+      display:flex;
+      align-items:center;
+      gap:18px;
+      font-size:15px;
+      color:var(--muted);
+    }
+
+    nav a{
+      text-decoration:none;
+      font-weight:600;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:14px 20px;
+      border-radius:14px;
+      border:1px solid transparent;
+      text-decoration:none;
+      font-weight:800;
+      cursor:pointer;
+      transition:.2s ease;
+    }
+
+    .btn-primary{
+      background:var(--blue);
+      color:white;
+      box-shadow:0 12px 28px rgba(0,91,255,.25);
+    }
+
+    .btn-primary:hover{
+      transform:translateY(-2px);
+      background:var(--blue-dark);
+    }
+
+    .btn-secondary{
+      background:white;
+      color:var(--blue);
+      border-color:#bfdbfe;
+    }
+
+    .btn-secondary:hover{
+      transform:translateY(-2px);
+      border-color:var(--blue);
+    }
+
+    .hero{
+      padding:42px 0 30px;
+      display:grid;
+      grid-template-columns:1.12fr .88fr;
+      gap:34px;
+      align-items:center;
+    }
+
+    .hero-card{
+      background:rgba(255,255,255,.92);
+      border:1px solid var(--border);
+      border-radius:32px;
+      padding:48px;
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .hero-card::before{
+      content:"";
+      position:absolute;
+      right:-80px;
+      top:-80px;
+      width:230px;
+      height:230px;
+      border-radius:50%;
+      background:rgba(0,91,255,.08);
+    }
+
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:#eff6ff;
+      color:var(--blue);
+      padding:8px 14px;
+      border-radius:999px;
+      font-size:14px;
+      font-weight:800;
+      margin-bottom:22px;
+    }
+
+    h1{
+      font-size:52px;
+      line-height:1.04;
+      letter-spacing:-1.8px;
+      margin:0 0 22px;
+      max-width:780px;
+    }
+
+    h1 span{color:var(--blue)}
+
+    .lead{
+      font-size:20px;
+      color:#334155;
+      margin:0 0 28px;
+      max-width:720px;
+    }
+
+    .cta-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:14px;
+      margin-bottom:24px;
+    }
+
+    .microcopy{
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .side{
+      display:grid;
+      gap:16px;
+    }
+
+    .metric{
+      background:white;
+      border:1px solid var(--border);
+      border-radius:24px;
+      padding:24px;
+      box-shadow:0 12px 35px rgba(15,23,42,.06);
+    }
+
+    .metric strong{
+      display:block;
+      font-size:31px;
+      color:var(--blue);
+      line-height:1;
+      margin-bottom:8px;
+    }
+
+    .metric span{
+      color:var(--muted);
+      font-weight:600;
+    }
+
+    .logo-strip{
+      padding:6px 0 34px;
+    }
+
+    .logo-strip-inner{
+      background:rgba(255,255,255,.9);
+      border:1px solid var(--border);
+      border-radius:24px;
+      padding:22px 26px;
+      box-shadow:0 12px 35px rgba(15,23,42,.05);
+    }
+
+    .logo-strip-title{
+      margin:0 0 18px;
+      color:var(--muted);
+      font-size:14px;
+      font-weight:800;
+      letter-spacing:.02em;
+      text-transform:uppercase;
+      text-align:center;
+    }
+
+    .logo-list{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:18px;
+      align-items:center;
+    }
+
+    .client-logo{
+      height:76px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:12px;
+      border-radius:16px;
+      background:#fff;
+      border:1px solid #edf2f7;
+    }
+
+    .client-logo.logo-logometro{
+      background:#2b2a28;
+      border-color:#2b2a28;
+    }
+
+    .client-logo.logo-pro{
+      background:#000;
+      border-color:#000;
+    }
+
+    .client-logo img{
+      display:block;
+      max-width:100%;
+      max-height:52px;
+      width:auto;
+      height:auto;
+      object-fit:contain;
+    }
+
+    section{
+      padding:42px 0;
+    }
+
+    .section-head{
+      max-width:760px;
+      margin-bottom:26px;
+    }
+
+    .section-head h2{
+      font-size:36px;
+      line-height:1.12;
+      letter-spacing:-.8px;
+      margin:0 0 12px;
+    }
+
+    .section-head p{
+      margin:0;
+      color:var(--muted);
+      font-size:18px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+    }
+
+    .card{
+      background:white;
+      border:1px solid var(--border);
+      border-radius:24px;
+      padding:26px;
+      box-shadow:0 12px 35px rgba(15,23,42,.05);
+      transition:.2s ease;
+    }
+
+    .card:hover{
+      transform:translateY(-3px);
+      box-shadow:0 20px 45px rgba(15,23,42,.08);
+    }
+
+    .icon{
+      width:48px;
+      height:48px;
+      border-radius:16px;
+      background:#eff6ff;
+      color:var(--blue);
+      display:grid;
+      place-items:center;
+      font-size:22px;
+      margin-bottom:16px;
+    }
+
+    .card h3{
+      margin:0 0 9px;
+      font-size:20px;
+    }
+
+    .card p{
+      margin:0;
+      color:var(--muted);
+    }
+
+    .case-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:18px;
+    }
+
+    .case-card{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      min-height:360px;
+      justify-content:flex-end;
+      position:relative;
+      overflow:hidden;
+      color:white;
+      background-size:cover;
+      background-position:center;
+    }
+
+    .case-card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(180deg, rgba(15,23,42,.28), rgba(15,23,42,.88)),
+        linear-gradient(135deg, rgba(0,91,255,.28), transparent 48%);
+      z-index:0;
+    }
+
+    .case-card > *{
+      position:relative;
+      z-index:1;
+    }
+
+    .case-transport{
+      background-image:url("https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=900&q=80");
+    }
+
+    .case-fashion{
+      background-image:url("https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?auto=format&fit=crop&w=900&q=80");
+    }
+
+    .case-logistics{
+      background-image:url("https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=900&q=80");
+    }
+
+    .case-gym{
+      background-image:url("https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=900&q=80");
+    }
+
+    .case-top{
+      display:flex;
+      align-items:center;
+      justify-content:flex-start;
+      gap:14px;
+    }
+
+    .case-badge{
+      display:inline-flex;
+      align-items:center;
+      color:white;
+      background:rgba(255,255,255,.16);
+      border:1px solid rgba(255,255,255,.28);
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:12px;
+      font-weight:800;
+      white-space:nowrap;
+      backdrop-filter:blur(8px);
+    }
+
+    .case-card h3{
+      margin:0;
+      color:white;
+    }
+
+    .case-card p{
+      margin:0;
+      color:rgba(255,255,255,.86);
+    }
+
+    .case-points{
+      list-style:none;
+      padding:0;
+      margin:2px 0 0;
+      display:grid;
+      gap:9px;
+    }
+
+    .case-points li{
+      display:flex;
+      gap:9px;
+      color:white;
+      font-weight:700;
+      font-size:14px;
+    }
+
+    .case-points li::before{
+      content:"";
+      width:7px;
+      height:7px;
+      border-radius:50%;
+      background:#93c5fd;
+      flex:0 0 auto;
+      margin-top:8px;
+    }
+
+    .case-note{
+      margin:22px 0 0;
+      color:#334155;
+      background:#eff6ff;
+      border:1px solid #dbeafe;
+      border-radius:20px;
+      padding:18px 20px;
+      font-weight:700;
+    }
+
+    .split{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:22px;
+    }
+
+    .panel{
+      background:white;
+      border:1px solid var(--border);
+      border-radius:28px;
+      padding:32px;
+      box-shadow:0 12px 35px rgba(15,23,42,.05);
+    }
+
+    .panel h2{
+      margin:0 0 12px;
+      font-size:30px;
+      letter-spacing:-.6px;
+    }
+
+    .panel p{
+      color:var(--muted);
+      margin-top:0;
+    }
+
+    ul.clean{
+      list-style:none;
+      padding:0;
+      margin:20px 0 0;
+    }
+
+    ul.clean li{
+      display:flex;
+      gap:10px;
+      margin-bottom:13px;
+      color:#334155;
+    }
+
+    ul.clean li::before{
+      content:"\2713";
+      color:var(--green);
+      font-weight:900;
+    }
+
+    .dark{
+      background:var(--text);
+      color:white;
+      border-radius:32px;
+      padding:42px;
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:28px;
+      align-items:center;
+      box-shadow:var(--shadow);
+    }
+
+    .dark h2{
+      margin:0 0 12px;
+      font-size:38px;
+      line-height:1.1;
+      letter-spacing:-.8px;
+    }
+
+    .dark p{color:#cbd5e1;margin:0}
+
+    .price-box{
+      background:white;
+      color:var(--text);
+      border-radius:24px;
+      padding:26px;
+      text-align:center;
+    }
+
+    .price-box span{
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .price-box strong{
+      display:block;
+      color:var(--blue);
+      font-size:36px;
+      line-height:1;
+      margin:8px 0;
+    }
+
+    .steps{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:16px;
+    }
+
+    .step{
+      background:white;
+      border:1px solid var(--border);
+      border-radius:22px;
+      padding:22px;
+      box-shadow:0 12px 35px rgba(15,23,42,.05);
+    }
+
+    .step-number{
+      width:34px;
+      height:34px;
+      border-radius:50%;
+      background:#eff6ff;
+      color:var(--blue);
+      display:grid;
+      place-items:center;
+      font-weight:900;
+      margin-bottom:12px;
+    }
+
+    .step h3{margin:0 0 8px}
+    .step p{margin:0;color:var(--muted)}
+
+    .faq-list{
+      display:grid;
+      gap:14px;
+    }
+
+    .faq-item{
+      background:white;
+      border:1px solid var(--border);
+      border-radius:22px;
+      box-shadow:0 12px 35px rgba(15,23,42,.05);
+      overflow:hidden;
+    }
+
+    .faq-item summary{
+      list-style:none;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      padding:20px 22px;
+      color:var(--text);
+      font-weight:800;
+    }
+
+    .faq-item summary::-webkit-details-marker{
+      display:none;
+    }
+
+    .faq-item summary::after{
+      content:"+";
+      width:30px;
+      height:30px;
+      border-radius:50%;
+      background:#eff6ff;
+      color:var(--blue);
+      display:grid;
+      place-items:center;
+      flex:0 0 auto;
+      font-size:20px;
+      line-height:1;
+      transition:.2s ease;
+    }
+
+    .faq-item[open] summary::after{
+      content:"-";
+      background:var(--blue);
+      color:white;
+    }
+
+    .faq-item p{
+      margin:0;
+      padding:0 22px 22px;
+      color:var(--muted);
+    }
+
+    .contact{
+      background:white;
+      border:1px solid var(--border);
+      border-radius:32px;
+      padding:38px;
+      text-align:center;
+      box-shadow:var(--shadow);
+    }
+
+    .contact h2{
+      margin:0 0 12px;
+      font-size:34px;
+      letter-spacing:-.6px;
+    }
+
+    .contact p{
+      color:var(--muted);
+      margin:0 auto 22px;
+      max-width:720px;
+    }
+
+    .contact-form{
+      display:grid;
+      gap:14px;
+      max-width:760px;
+      margin:26px auto 0;
+      text-align:left;
+    }
+
+    .contact-form-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      padding:14px 16px;
+      border:1px solid #dbeafe;
+      border-radius:18px;
+      background:#eff6ff;
+      color:#334155;
+      font-weight:750;
+    }
+
+    .contact-form-badge{
+      display:inline-flex;
+      align-items:center;
+      color:var(--blue);
+      background:#fff;
+      border:1px solid #bfdbfe;
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:12px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+
+    .contact-form-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+    }
+
+    .contact-field{
+      display:grid;
+      gap:6px;
+    }
+
+    .contact-field span{
+      color:#334155;
+      font-size:13px;
+      font-weight:800;
+    }
+
+    .contact-field input,
+    .contact-field textarea{
+      width:100%;
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px 14px;
+      color:var(--text);
+      background:#fff;
+      font:inherit;
+      outline:none;
+      transition:.2s ease;
+    }
+
+    .contact-field textarea{
+      min-height:112px;
+      resize:vertical;
+    }
+
+    .contact-field input:focus,
+    .contact-field textarea:focus{
+      border-color:var(--blue);
+      box-shadow:0 0 0 4px rgba(0,91,255,.10);
+    }
+
+    .contact-field-full{
+      grid-column:1 / -1;
+    }
+
+    .contact-submit-row{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      gap:12px;
+    }
+
+    .contact-submit{
+      border:0;
+    }
+
+    .contact .contact-status{
+      margin:0;
+      min-height:20px;
+      color:var(--muted);
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .contact-links{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:12px;
+      margin-top:18px;
+    }
+
+    footer{
+      padding:28px 0 40px;
+      text-align:center;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .reveal{
+      opacity:0;
+      transform:translateY(18px);
+      transition:.55s ease;
+    }
+
+    .reveal.visible{
+      opacity:1;
+      transform:translateY(0);
+    }
+
+    @media(max-width:900px){
+      header{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+
+      nav{
+        flex-wrap:wrap;
+      }
+
+      .hero,.split,.dark{
+        grid-template-columns:1fr;
+      }
+
+      h1{
+        font-size:38px;
+      }
+
+      .hero-card{
+        padding:32px;
+      }
+
+      .grid,.steps{
+        grid-template-columns:1fr;
+      }
+
+      .case-grid{
+        grid-template-columns:1fr;
+      }
+
+      .contact-form-grid{
+        grid-template-columns:1fr;
+      }
+
+      .logo-list{
+        grid-template-columns:repeat(2,1fr);
+      }
+    }
+
+    @media(max-width:520px){
+      .logo-strip-inner{
+        padding:18px;
+      }
+
+      .logo-list{
+        grid-template-columns:1fr;
+        gap:12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <img class="logo" src="favicon.png" alt="Jonatan Murillo" />
+        <div>Jonatan Murillo</div>
+      </div>
+
+      <nav>
+        <a href="#servicios">Qu&eacute; hago</a>
+        <a href="#modelo">C&oacute;mo trabajo</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-card reveal">
+          <div class="tag">Soy Jonatan &middot; apoyo operativo y tecnol&oacute;gico para empresas</div>
+
+          <h1>Te ayudo a quitar tareas administrativas <span>sin contratar m&aacute;s personal.</span></h1>
+
+          <p class="lead">
+            Trabajo directamente contigo para reducir carga administrativa, ordenar documentaci&oacute;n,
+            automatizar procesos y liberar tiempo para que tu equipo pueda centrarse en producir y generar ingresos.
+          </p>
+
+          <div class="cta-row">
+            <a class="btn btn-primary" href="mailto:jomma.tech@gmail.com?subject=Consulta%20apoyo%20operativo">Hablar con Jonatan</a>
+            <a class="btn btn-secondary" href="tel:625433667">Llamar ahora</a>
+          </div>
+
+          <div class="microcopy">
+            Trato directo conmigo &middot; Por horas o peque&ntilde;as cuotas mensuales &middot; Presencial en M&eacute;rida/Extremadura y remoto.
+          </div>
+        </div>
+
+        <div class="side reveal">
+          <div class="metric">
+            <strong>Por horas</strong>
+            <span>Me incorporo cuando me necesitas, sin ampliar plantilla.</span>
+          </div>
+
+          <div class="metric">
+            <strong>+ control</strong>
+            <span>Te ayudo a ordenar documentos, facturas, albaranes, datos y procesos.</span>
+          </div>
+
+          <div class="metric">
+            <strong>- carga</strong>
+            <span>Menos tareas repetitivas para ti y para tu equipo.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="logo-strip" aria-labelledby="client-logos-title">
+        <div class="logo-strip-inner reveal">
+          <p class="logo-strip-title" id="client-logos-title">Empresas que ya conf&iacute;an en m&iacute;</p>
+
+          <div class="logo-list">
+            <div class="client-logo">
+              <img src="alditraex.png" alt="Alditraex" loading="lazy" />
+            </div>
+            <div class="client-logo logo-logometro">
+              <img src="logometro.png" alt="Logometro" loading="lazy" />
+            </div>
+            <div class="client-logo">
+              <img src="logosfm.png" alt="SFM" loading="lazy" />
+            </div>
+            <div class="client-logo logo-pro">
+              <img src="logo_pro.png" alt="Pro" loading="lazy" />
+            </div>
+            <div class="client-logo">
+              <img src="logo_weark.png" alt="Weark" loading="lazy" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="servicios">
+        <div class="section-head reveal">
+          <h2>Ejemplos de tareas que puedes externalizar</h2>
+          <p>
+            Estos son ejemplos reales de c&oacute;mo puedo entrar en el d&iacute;a a d&iacute;a de una empresa para quitar carga
+            administrativa y operativa sin interrumpir su forma de trabajar.
+          </p>
+        </div>
+
+        <div class="case-grid">
+          <div class="card case-card case-transport reveal">
+            <div class="case-top">
+              <span class="case-badge">Caso pr&aacute;ctico</span>
+            </div>
+            <h3>Empresa de transporte</h3>
+            <p>
+              Me encargo de la gesti&oacute;n de albaranes de entrega: escaneado, lectura de informaci&oacute;n,
+              archivo digital y organizaci&oacute;n documental. Ahora la informaci&oacute;n est&aacute; accesible
+              en segundos, sin buscar papeles ni carpetas.
+            </p>
+            <ul class="case-points">
+              <li>Albaranes digitalizados</li>
+              <li>Informaci&oacute;n localizada en un clic</li>
+              <li>Menos tiempo administrativo</li>
+            </ul>
+          </div>
+
+          <div class="card case-card case-fashion reveal">
+            <div class="case-top">
+              <span class="case-badge">Caso pr&aacute;ctico</span>
+            </div>
+            <h3>F&aacute;brica de ropa</h3>
+            <p>
+              Apoyo en tareas relacionadas con facturas, cobros, conciliaci&oacute;n bancaria y control
+              administrativo. La empresa dispone de informes claros y datos actualizados sin tener que dedicar
+              horas a revisar documentos manualmente.
+            </p>
+            <ul class="case-points">
+              <li>Facturas y cobros controlados</li>
+              <li>Conciliaci&oacute;n m&aacute;s &aacute;gil</li>
+              <li>Informes disponibles al instante</li>
+            </ul>
+          </div>
+
+          <div class="card case-card case-logistics reveal">
+            <div class="case-top">
+              <span class="case-badge">Caso pr&aacute;ctico</span>
+            </div>
+            <h3>Empresa de transporte y log&iacute;stica</h3>
+            <p>
+              Asumo parte de la gesti&oacute;n de presupuestos, albaranes y facturaci&oacute;n. El equipo reduce
+              tareas repetitivas y puede centrarse en captar clientes, generar negocio y mejorar la atenci&oacute;n diaria.
+            </p>
+            <ul class="case-points">
+              <li>Presupuestos m&aacute;s r&aacute;pidos</li>
+              <li>Albaranes organizados</li>
+              <li>Facturaci&oacute;n m&aacute;s controlada</li>
+            </ul>
+          </div>
+
+          <div class="card case-card case-gym reveal">
+            <div class="case-top">
+              <span class="case-badge">Caso pr&aacute;ctico</span>
+            </div>
+            <h3>Gimnasio y actividades deportivas</h3>
+            <p>
+              Ayudo con la gesti&oacute;n de reservas, organizaci&oacute;n de grupos y control de actividades.
+              El sistema permite centralizar horarios, plazas disponibles y seguimiento de inscripciones sin depender
+              de llamadas, papeles o mensajes desordenados.
+            </p>
+            <ul class="case-points">
+              <li>Reservas organizadas autom&aacute;ticamente</li>
+              <li>Menos gesti&oacute;n manual</li>
+              <li>Mejor control de grupos y horarios</li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="case-note reveal">
+          Cada empresa tiene una carga distinta. Por eso primero escucho, miro c&oacute;mo trabajas y detecto qu&eacute; tareas consumen m&aacute;s
+          tiempo para descargarlas de forma progresiva.
+        </p>
+      </section>
+
+      <section class="split" id="modelo">
+        <div class="panel reveal">
+          <h2>C&eacute;ntrate en generar ingresos.</h2>
+          <p>
+            Mi idea es sencilla: ayudarte a quitar del medio tareas que consumen tiempo y no siempre justifican una contrataci&oacute;n completa.
+          </p>
+
+          <ul class="clean">
+            <li>Menos tiempo buscando documentos.</li>
+            <li>Menos tareas administrativas repetitivas.</li>
+            <li>M&aacute;s control sobre la informaci&oacute;n.</li>
+            <li>M&aacute;s orden en procesos internos.</li>
+            <li>M&aacute;s tiempo para atender clientes y producir.</li>
+          </ul>
+        </div>
+
+        <div class="panel reveal">
+          <h2>Colaboraci&oacute;n directa conmigo.</h2>
+          <p>
+            No hablas con departamentos ni con intermediarios. Hablas conmigo, revisamos qu&eacute; necesitas y acordamos una forma de trabajo realista.
+          </p>
+
+          <ul class="clean">
+            <li>Apoyo presencial o remoto conmigo.</li>
+            <li>Sin compromiso de contrataci&oacute;n fija.</li>
+            <li>Adaptado a necesidades reales.</li>
+            <li>Desde tareas administrativas hasta automatizaciones.</li>
+            <li>Un trato cercano para organizar y mejorar procesos paso a paso.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section>
+        <div class="dark reveal">
+          <div>
+            <h2>No necesitas m&aacute;s herramientas. Necesitas mejores procesos.</h2>
+            <p>
+              Muchas empresas ya tienen Excel, WhatsApp, correo y carpetas. El problema es que todo est&aacute; desconectado.
+              Mi trabajo es sentarme contigo, entender ese desorden y ayudarte a convertirlo en algo m&aacute;s simple.
+            </p>
+          </div>
+
+          <div class="price-box">
+            <span>Formato flexible</span>
+            <strong>por horas</strong>
+            <p>o cuota mensual seg&uacute;n carga de trabajo.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="faq">
+        <div class="section-head reveal">
+          <h2>Preguntas frecuentes</h2>
+          <p>Algunas dudas habituales antes de contar conmigo para tareas administrativas, documentales u operativas.</p>
+        </div>
+
+        <div class="faq-list">
+          <details class="faq-item reveal">
+            <summary>&iquest;Puedo contratar solo unas horas puntuales?</summary>
+            <p>
+              S&iacute;. Puedes empezar conmigo con una intervenci&oacute;n concreta por horas para ordenar documentos,
+              revisar un proceso o descargar una tarea acumulada sin asumir un compromiso mensual.
+            </p>
+          </details>
+
+          <details class="faq-item reveal">
+            <summary>&iquest;Tambi&eacute;n trabajas con cuota mensual?</summary>
+            <p>
+              S&iacute;. Si tu empresa tiene una carga recurrente, podemos plantear una peque&ntilde;a cuota mensual
+              con IVA e impuestos incluidos seg&uacute;n corresponda, para mantener al d&iacute;a albaranes, facturas,
+              informes, reservas, documentaci&oacute;n o seguimiento operativo.
+            </p>
+          </details>
+
+          <details class="faq-item reveal">
+            <summary>&iquest;Qu&eacute; tipo de tareas puedo delegar?</summary>
+            <p>
+              Tareas repetitivas o administrativas como clasificaci&oacute;n documental, control de albaranes,
+              facturaci&oacute;n, presupuestos, informes, conciliaciones, bases de datos, reservas o peque&ntilde;as automatizaciones.
+            </p>
+          </details>
+
+          <details class="faq-item reveal">
+            <summary>&iquest;Trabajas en remoto o presencial?</summary>
+            <p>
+              Puedo trabajar en remoto y tambi&eacute;n de forma presencial en M&eacute;rida y Extremadura cuando el proceso
+              lo requiera, especialmente al inicio para entender bien la operativa.
+            </p>
+          </details>
+
+          <details class="faq-item reveal">
+            <summary>&iquest;C&oacute;mo se protege la informaci&oacute;n de la empresa?</summary>
+            <p>
+              La informaci&oacute;n se trata con confidencialidad y solo se trabaja con los accesos, documentos y permisos
+              necesarios para cada tarea. La idea es ordenar y facilitar el trabajo, no complicar la gesti&oacute;n interna.
+            </p>
+          </details>
+        </div>
+      </section>
+
+      <section id="contacto">
+        <div class="contact reveal">
+          <h2>&iquest;Necesitas descargar a tu equipo de tareas repetitivas?</h2>
+          <p>
+            Cu&eacute;ntame qu&eacute; te est&aacute; quitando tiempo y vemos con calma si puedo ayudarte por horas o mediante una peque&ntilde;a cuota mensual.
+          </p>
+
+          <form class="contact-form" id="tareasContactForm" novalidate>
+            <div class="contact-form-head">
+              <span>Este mensaje me llega identificado como consulta de tareas.</span>
+              <span class="contact-form-badge">Tareas / apoyo operativo</span>
+            </div>
+
+            <input type="hidden" name="origen" value="Tareas / apoyo operativo" />
+            <input type="hidden" name="asunto" value="Consulta tareas - apoyo operativo" />
+
+            <div class="contact-form-grid">
+              <label class="contact-field">
+                <span>Nombre</span>
+                <input type="text" name="nombre" autocomplete="name" required />
+              </label>
+
+              <label class="contact-field">
+                <span>Email o WhatsApp</span>
+                <input type="text" name="contacto_detalle" autocomplete="email" required />
+              </label>
+
+              <label class="contact-field contact-field-full">
+                <span>&iquest;Qu&eacute; tarea quieres quitarte de encima?</span>
+                <textarea name="mensaje" placeholder="Albaranes, facturas, reservas, informes, documentos..." required></textarea>
+              </label>
+            </div>
+
+            <div class="contact-submit-row">
+              <button class="btn btn-primary contact-submit" type="submit">Enviar consulta de tareas</button>
+              <p class="contact-status" id="tareasContactStatus" aria-live="polite">Te responder&eacute; personalmente. Sin compromiso.</p>
+            </div>
+          </form>
+
+          <div class="contact-links">
+            <a class="btn btn-secondary" href="mailto:jomma.tech@gmail.com?subject=Consulta%20tareas%20-%20apoyo%20operativo">Enviar email directo</a>
+            <a class="btn btn-secondary" href="tel:625433667">625 433 667</a>
+            <a class="btn btn-secondary" href="https://www.jm2-tech.es" target="_blank">Ver mi web</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      Jonatan Murillo &middot; M&eacute;rida, Extremadura &middot; Apoyo operativo y tecnol&oacute;gico para empresas
+    </footer>
+  </div>
+
+  <script>
+    const tareasContactForm = document.getElementById('tareasContactForm');
+    const tareasContactStatus = document.getElementById('tareasContactStatus');
+    const EMAILJS_SERVICE_ID = 'service_a1xi29i';
+    const EMAILJS_TEMPLATE_ID = 'template_8dl1y4o';
+    const EMAILJS_PUBLIC_KEY = 'topNg38j9LTlBzeSQ';
+
+    if (window.emailjs) {
+      window.emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+    }
+
+    const revealItems = document.querySelectorAll('.reveal');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    revealItems.forEach(item => observer.observe(item));
+
+    tareasContactForm?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(tareasContactForm);
+      const nombre = String(formData.get('nombre') || '').trim();
+      const contactoDetalle = String(formData.get('contacto_detalle') || '').trim();
+      const mensaje = String(formData.get('mensaje') || '').trim();
+      const origen = 'Tareas / apoyo operativo';
+      const asunto = 'Consulta tareas - apoyo operativo';
+
+      if (!nombre || !contactoDetalle || !mensaje) {
+        if (tareasContactStatus) tareasContactStatus.textContent = 'Completa todos los campos antes de enviar.';
+        return;
+      }
+
+      if (!window.emailjs) {
+        if (tareasContactStatus) tareasContactStatus.textContent = 'No se pudo cargar EmailJS. Puedes usar el email directo.';
+        return;
+      }
+
+      const submitButton = tareasContactForm.querySelector('button[type="submit"]');
+      if (submitButton instanceof HTMLButtonElement) {
+        submitButton.disabled = true;
+        submitButton.textContent = 'Enviando...';
+      }
+      if (tareasContactStatus) tareasContactStatus.textContent = 'Enviando consulta...';
+
+      try {
+        await window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+          nombre,
+          email: contactoDetalle,
+          telefono: contactoDetalle,
+          empresa: origen,
+          origen,
+          asunto,
+          servicio: 'Tareas externalizadas',
+          mensaje,
+          forma_de_contacto: 'Email o WhatsApp',
+          contacto_detalle: contactoDetalle,
+          dia_llamada: 'No indicado',
+          hora_llamada: 'No indicado',
+          'forma de contacto': 'Email o WhatsApp',
+          'tipo de consulta': asunto,
+        }, { publicKey: EMAILJS_PUBLIC_KEY });
+
+        if (tareasContactStatus) tareasContactStatus.textContent = 'Consulta enviada correctamente. Te respondere personalmente.';
+        tareasContactForm.reset();
+      } catch (error) {
+        const errorText = error && typeof error === 'object' && 'text' in error ? String(error.text) : 'error desconocido';
+        if (tareasContactStatus) tareasContactStatus.textContent = `No se pudo enviar (${errorText}). Puedes usar el email directo.`;
+      } finally {
+        if (submitButton instanceof HTMLButtonElement) {
+          submitButton.disabled = false;
+          submitButton.textContent = 'Enviar consulta de tareas';
+        }
+      }
+    });
+  </script>
+</body>
+</html>
