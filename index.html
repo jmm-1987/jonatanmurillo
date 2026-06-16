@@ -1214,7 +1214,7 @@
             </div>
 
             <div class="contact-submit-row">
-              <button class="btn btn-primary contact-submit" type="submit">Enviar consulta</button>
+              <button class="btn btn-primary contact-submit" type="submit">Enviar</button>
               <p class="contact-status" id="footerContactStatus" aria-live="polite">Te responder&eacute; personalmente. Sin compromiso.</p>
             </div>
           </form>
@@ -1279,7 +1279,7 @@
       const nombre = String(formData.get('nombre') || '').trim();
       const formaContacto = String(formData.get('forma_de_contacto') || 'WhatsApp').trim();
       const contactoDetalle = String(formData.get('contacto_detalle') || '').trim();
-      const procedencia = window.location.pathname || 'jonatanmurillo';
+      const procedencia = 'web curriculum';
       const referrer = document.referrer || 'Directo';
       const timestamp = new Date().toISOString();
 
