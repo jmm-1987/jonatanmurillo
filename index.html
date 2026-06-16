@@ -714,6 +714,7 @@
     }
 
     .contact-field input,
+    .contact-field select,
     .contact-field textarea{
       width:100%;
       border:1px solid var(--border);
@@ -726,12 +727,17 @@
       transition:.2s ease;
     }
 
+    .contact-field select{
+      min-height:50px;
+    }
+
     .contact-field textarea{
       min-height:112px;
       resize:vertical;
     }
 
     .contact-field input:focus,
+    .contact-field select:focus,
     .contact-field textarea:focus{
       border-color:var(--blue);
       box-shadow:0 0 0 4px rgba(0,91,255,.10);
@@ -1185,9 +1191,7 @@
             Cu&eacute;ntame qu&eacute; te est&aacute; quitando tiempo y vemos con calma si puedo ayudarte por horas o mediante una peque&ntilde;a cuota mensual.
           </p>
 
-          <form class="contact-form" id="tareasContactForm" novalidate>
-            <input type="hidden" name="origen" value="Web" />
-            <input type="hidden" name="asunto" value="Consulta desde la web" />
+          <form class="contact-form" id="footerContactForm" novalidate>
 
             <div class="contact-form-grid">
               <label class="contact-field">
@@ -1196,19 +1200,22 @@
               </label>
 
               <label class="contact-field">
-                <span>Teléfono o email</span>
-                <input type="text" name="contacto_detalle" autocomplete="email" required />
+                <span>Prefiero contacto por</span>
+                <select name="forma_de_contacto" required>
+                  <option value="WhatsApp">WhatsApp</option>
+                  <option value="Llamada">Llamada</option>
+                </select>
               </label>
 
               <label class="contact-field contact-field-full">
-                <span>&iquest;Qu&eacute; tarea quieres quitarte de encima?</span>
-                <textarea name="mensaje" placeholder="Albaranes, facturas, reservas, informes, documentos..." required></textarea>
+                <span>Tel&eacute;fono</span>
+                <input type="text" name="contacto_detalle" autocomplete="tel" required />
               </label>
             </div>
 
             <div class="contact-submit-row">
               <button class="btn btn-primary contact-submit" type="submit">Enviar consulta</button>
-              <p class="contact-status" id="tareasContactStatus" aria-live="polite">Te responder&eacute; personalmente. Sin compromiso.</p>
+              <p class="contact-status" id="footerContactStatus" aria-live="polite">Te responder&eacute; personalmente. Sin compromiso.</p>
             </div>
           </form>
 
@@ -1233,14 +1240,23 @@
   </a>
 
   <script>
-    const tareasContactForm = document.getElementById('tareasContactForm');
-    const tareasContactStatus = document.getElementById('tareasContactStatus');
-    const EMAILJS_SERVICE_ID = 'service_a1xi29i';
+    const footerContactForm = document.getElementById('footerContactForm');
+    const footerContactStatus = document.getElementById('footerContactStatus');
+    const EMAILJS_SERVICE_ID = 'jm2-limpio';
     const EMAILJS_TEMPLATE_ID = 'template_8dl1y4o';
-    const EMAILJS_PUBLIC_KEY = 'topNg38j9LTlBzeSQ';
+    const EMAILJS_PUBLIC_KEY = 'LLIuQx-WZ1x6XBuDn';
 
     if (window.emailjs) {
       window.emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+    }
+
+    function trackEvent(eventName, params = {}) {
+      if (typeof window.gtag !== 'function') return;
+      window.gtag('event', eventName, {
+        page_path: window.location.pathname,
+        page_title: document.title,
+        ...params,
+      });
     }
 
     const revealItems = document.querySelectorAll('.reveal');
@@ -1256,56 +1272,54 @@
 
     revealItems.forEach(item => observer.observe(item));
 
-    tareasContactForm?.addEventListener('submit', async (event) => {
+    footerContactForm?.addEventListener('submit', async (event) => {
       event.preventDefault();
 
-      const formData = new FormData(tareasContactForm);
+      const formData = new FormData(footerContactForm);
       const nombre = String(formData.get('nombre') || '').trim();
+      const formaContacto = String(formData.get('forma_de_contacto') || 'WhatsApp').trim();
       const contactoDetalle = String(formData.get('contacto_detalle') || '').trim();
-      const mensaje = String(formData.get('mensaje') || '').trim();
-      const origen = 'Web';
-      const asunto = 'Consulta desde la web';
+      const procedencia = window.location.pathname || 'jonatanmurillo';
+      const referrer = document.referrer || 'Directo';
+      const timestamp = new Date().toISOString();
 
-      if (!nombre || !contactoDetalle || !mensaje) {
-        if (tareasContactStatus) tareasContactStatus.textContent = 'Completa todos los campos antes de enviar.';
+      if (!nombre || !contactoDetalle) {
+        if (footerContactStatus) footerContactStatus.textContent = 'Completa todos los campos antes de enviar.';
         return;
       }
 
       if (!window.emailjs) {
-        if (tareasContactStatus) tareasContactStatus.textContent = 'No se pudo cargar EmailJS. Puedes usar el email directo.';
+        if (footerContactStatus) footerContactStatus.textContent = 'No se pudo cargar EmailJS.';
         return;
       }
 
-      const submitButton = tareasContactForm.querySelector('button[type="submit"]');
+      const submitButton = footerContactForm.querySelector('button[type="submit"]');
       if (submitButton instanceof HTMLButtonElement) {
         submitButton.disabled = true;
         submitButton.textContent = 'Enviando...';
       }
-      if (tareasContactStatus) tareasContactStatus.textContent = 'Enviando consulta...';
+      if (footerContactStatus) footerContactStatus.textContent = 'Enviando mensaje...';
 
       try {
         await window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
           nombre,
-          email: contactoDetalle,
+          email: 'No indicado',
           telefono: contactoDetalle,
-          empresa: origen,
-          origen,
-          asunto,
-          servicio: 'Consulta desde la web',
-          mensaje,
-          forma_de_contacto: 'Email o WhatsApp',
-          contacto_detalle: contactoDetalle,
-          dia_llamada: 'web de Jonatan Murillo',
-          hora_llamada: 'No indicado',
-          'forma de contacto': 'Email o WhatsApp',
-          'tipo de consulta': asunto,
+          forma_de_contacto: formaContacto,
+          procedencia,
+          referrer,
+          timestamp,
         }, { publicKey: EMAILJS_PUBLIC_KEY });
 
-        if (tareasContactStatus) tareasContactStatus.textContent = 'Consulta enviada correctamente. Te respondere personalmente.';
-        tareasContactForm.reset();
+        if (footerContactStatus) footerContactStatus.textContent = 'Mensaje enviado correctamente. Te contactaremos pronto.';
+        trackEvent('generate_lead', {
+          contact_method: formaContacto.toLowerCase(),
+          lead_source: 'footer_form',
+        });
+        footerContactForm.reset();
       } catch (error) {
         const errorText = error && typeof error === 'object' && 'text' in error ? String(error.text) : 'error desconocido';
-        if (tareasContactStatus) tareasContactStatus.textContent = `No se pudo enviar (${errorText}). Puedes usar el email directo.`;
+        if (footerContactStatus) footerContactStatus.textContent = `No se pudo enviar (${errorText}).`;
       } finally {
         if (submitButton instanceof HTMLButtonElement) {
           submitButton.disabled = false;
